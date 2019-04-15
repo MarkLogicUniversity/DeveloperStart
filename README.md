@@ -2,7 +2,7 @@
 
 ## Overview:
 
-This project is designed to be used with this [**series of video tutorials and associated hands-on exercises that are available for new MarkLogic Developers**](https://developer.marklogic.com/video/data-hub-framework/). 
+This project is designed to be used with this [**series of video tutorials and associated hands-on exercises that are available for new MarkLogic Developers**](https://developer.marklogic.com/video/data-hub/). 
 
 In this video series you will learn how to:
 
