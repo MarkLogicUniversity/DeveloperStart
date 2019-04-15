@@ -1,0 +1,97 @@
+<export><workspace name="Access"><query name="String Search" focus="true" listorder="1" taborder="1" active="true" database="11060652143930979793" server="10721038121370025907" database-name="data-hub-FINAL" server-name="data-hub-FINAL" mode="javascript">/*
+  MarkLogic is a search engine so you can use it to explore and discover your data.
+  MarkLogic provides a powerful search API called JSearch (JavaScript Search) to make it easy to compose queries.
+  So let's search our data hub. Remember our data is currently in the Final database.
+  Select 'data-hub-FINAL' as the database in Query Console and run this query to see the results.
+*/
+
+'use strict';
+
+const jSearch = require('/MarkLogic/jsearch'); // this imports the JSearch API so we can use it
+
+if (xdmp.databaseName(xdmp.database()) === 'data-hub-FINAL') {
+  
+  const searchString = 'microsoft OR amazon'; // you can search your hub like you search the web using common search grammar
+  const companies = jSearch.collections('Company'); // we'll limit this search to only documents in the Company collection
+  
+  companies.documents()
+    .where(cts.parse(searchString))
+    .slice(0,5) // this is a custom slice of the result set. The default slice is 10.  
+    .result(); // results will come back as a JSON object with an array containing information about each match
+  
+} else {
+  'Please select the data-hub-FINAL database and run this code again.';
+}</query><query name="Range Search" focus="false" listorder="3" taborder="3" active="true" database="11060652143930979793" server="10721038121370025907" database-name="data-hub-FINAL" server-name="data-hub-FINAL" mode="javascript">/*
+  Now we will use the range indexes that we configured for our Company entity.
+  
+  Let's answer this question:
+    Return at most 5 matches, return only the instance data, of companies that have revenues between $80 billion and $1 trillion dollars.
+    
+    NOTE...our data reflects revenue numbers as follows: 
+      85000 = 85 billion
+      5250 = 5 billion, 250 million
+      250 = 250 million
+      etc.
+*/
+
+'use strict';
+
+const jSearch = require('/MarkLogic/jsearch'); 
+
+if (xdmp.databaseName(xdmp.database()) === 'data-hub-FINAL') {
+  
+  const companies = jSearch.collections('Company');
+  
+  companies.documents()
+    .where(
+      jSearch.byExample([ 
+        {  
+          "$and": [
+            { "totalRevenue": { "$le": 100000 } },
+            { "totalRevenue": { "$ge": 80000 } }
+          ]
+        }
+      ])
+    )
+    .slice(0,10)
+    .map({ extract: { paths: ['/envelope/instance/Company'] } })
+    .result(); 
+  
+} else {
+  'Please select the data-hub-FINAL database and run this code again.';
+}</query><query name="Geospatial Search" focus="false" listorder="4" taborder="4" active="true" database="11060652143930979793" server="10721038121370025907" database-name="data-hub-FINAL" server-name="data-hub-FINAL" mode="javascript">/*
+ In this example we will use MarkLogic geospatial search capability to find companies that are located within a 100 mile radius of Philadelphia Pennsylvania.
+ 
+ Philadeplhia PA is represented by a geospatial point containing a latitude and longitude.
+ 
+ This type of data can be found using many APIs such as the Google Maps or Bing APIs.
+ 
+ For this example I used https://www.latlong.net/ to find the latitude and longitude.
+*/
+
+'use strict';
+
+const jSearch = require('/MarkLogic/jsearch'); 
+
+if (xdmp.databaseName(xdmp.database()) === 'data-hub-FINAL') {
+  
+  const searchResults = 
+    jSearch.documents()
+    .where(
+      cts.andQuery([
+        cts.jsonPropertyPairGeospatialQuery(
+          'Company',
+          'latitude',
+          'longitude',
+          cts.circle(25, cts.point(39.95468, -75.16848))
+        ),
+        cts.collectionQuery('Company')])
+    )
+    .slice(0,20)
+    .result();
+  
+  searchResults;
+  
+} else {
+  'Please select the data-hub-FINAL database and run this code again.';
+}</query></workspace></export>

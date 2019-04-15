@@ -1,0 +1,41 @@
+{
+  "path-namespace" : [ {
+    "prefix" : "es",
+    "namespace-uri" : "http://marklogic.com/entity-services"
+  } ],
+  "range-element-index" : [ {
+    "collation" : "http://marklogic.com/collation/en",
+    "invalid-values" : "reject",
+    "localname" : "totalRevenue",
+    "namespace-uri" : null,
+    "range-value-positions" : false,
+    "scalar-type" : "decimal"
+  }, {
+    "collation" : "http://marklogic.com/collation/en",
+    "invalid-values" : "reject",
+    "localname" : "totalProfit",
+    "namespace-uri" : null,
+    "range-value-positions" : false,
+    "scalar-type" : "decimal"
+  }, {
+    "collation" : "http://marklogic.com/collation/en",
+    "invalid-values" : "reject",
+    "localname" : "profitMargin",
+    "namespace-uri" : null,
+    "range-value-positions" : false,
+    "scalar-type" : "decimal"
+  } ],
+  "geospatial-element-pair-index": 
+    [{
+      "parent-namespace-uri": null,
+      "parent-localname": "Company", 
+      "latitude-namespace-uri": null,
+      "latitude-localname": "latitude", 
+      "longitude-namespace-uri": null,
+      "longitude-localname": "longitude", 
+      "coordinate-system": "wgs84",
+      "range-value-positions": false,
+      "invalid-values": "reject"
+    }],
+  "database-name" : "%%mlFinalDbName%%"
+}
